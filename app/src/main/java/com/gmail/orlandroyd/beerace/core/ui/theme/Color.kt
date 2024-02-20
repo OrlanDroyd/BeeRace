@@ -1,4 +1,4 @@
-package com.gmail.orlandroyd.beerace.ui.theme
+package com.gmail.orlandroyd.beerace.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
