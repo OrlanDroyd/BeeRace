@@ -5,6 +5,7 @@ sealed class Screen(val route: String) {
     companion object {
         const val HOME = "home"
         const val RACE_BEES = "race_screen"
+        const val AUTHENTICATION = "authentication"
 
         const val TIME_ARGUMENT_KEY = "time_left"
     }
@@ -18,5 +19,7 @@ sealed class Screen(val route: String) {
         fun passTime(time: String) =
             "$RACE_BEES?$TIME_ARGUMENT_KEY=$time"
     }
+
+    data object Authentication : Screen(route = AUTHENTICATION)
 
 }

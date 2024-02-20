@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gmail.orlandroyd.beerace.feature_race.domain.model.BeeDomainModel
+import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_authentication.CaptchaScreen
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_home.RaceHomeScreen
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_home.RaceHomeViewModel
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_race.RaceScreen
@@ -33,13 +34,19 @@ fun SetupNavGraph(
 
         raceBeesRoute(
             navigateToAuthentication = {
-                // TODO
+                navController.navigate(Screen.Authentication.route)
             },
             navigateToError = {
                 // TODO
             },
             navigateToWin = {
                 // TODO
+            }
+        )
+
+        authenticationRoute(
+            onClose = {
+                navController.navigateUp()
             }
         )
 
@@ -103,5 +110,19 @@ private fun NavGraphBuilder.raceBeesRoute(
                 }
             }
         }
+    }
+}
+
+private fun NavGraphBuilder.authenticationRoute(
+    onClose: () -> Unit
+) {
+    composable(route = Screen.Authentication.route) {
+        CaptchaScreen(
+            onClose = onClose,
+            isSuccess = {
+                if (it) {
+                    onClose()
+                }
+            })
     }
 }
