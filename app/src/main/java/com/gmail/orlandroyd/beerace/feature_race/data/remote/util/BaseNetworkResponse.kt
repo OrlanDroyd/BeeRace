@@ -1,6 +1,7 @@
 package com.gmail.orlandroyd.beerace.feature_race.data.remote.util
 
 import android.util.Log
+import com.gmail.orlandroyd.beerace.feature_race.data.remote.dto.CaptchaResponse
 import com.gmail.orlandroyd.beerace.feature_race.data.remote.dto.ErrorResponse
 import com.gmail.orlandroyd.beerace.feature_race.util.Resource
 import com.google.gson.Gson
@@ -21,6 +22,18 @@ abstract class BaseNetworkResponse {
                     return Resource.Success(data = body)
                 }
             } else {
+                // Authentication
+                if (response.code() == 403) {
+                    val result: CaptchaResponse =
+                        Gson().fromJson(
+                            response.errorBody()!!.charStream(),
+                            CaptchaResponse::class.java
+                        )
+                    return Resource.Error(
+                        message = result.captchaUrl.orEmpty(),
+                        code = 403
+                    )
+                }
                 // Default Error
                 val result: ErrorResponse =
                     Gson().fromJson(
