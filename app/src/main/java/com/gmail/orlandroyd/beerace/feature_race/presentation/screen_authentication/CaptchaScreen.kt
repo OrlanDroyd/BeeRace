@@ -7,6 +7,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SetJavaScriptEnabled")
+@SuppressLint("SetJavaScriptEnabled")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CaptchaScreen(
@@ -45,35 +46,38 @@ fun CaptchaScreen(
 
             var code = 199 // TODO: Only for test, need to get code status after submit captcha
 
-            AndroidView(factory = { context ->
-                WebView(context).apply {
-                    webChromeClient = object : WebChromeClient() {}
-                    webViewClient = object : WebViewClient() {
-                        override fun shouldOverrideUrlLoading(
-                            view: WebView?,
-                            request: WebResourceRequest?,
-                        ): Boolean {
-                            return false
-                        }
-
-                        override fun doUpdateVisitedHistory(
-                            view: WebView?,
-                            url: String?,
-                            isReload: Boolean,
-                        ) {
-
-                            if (code == 200) {
-                                isSuccess(true)
+            AndroidView(
+                modifier = Modifier.padding(it),
+                factory = { context ->
+                    WebView(context).apply {
+                        webChromeClient = object : WebChromeClient() {}
+                        webViewClient = object : WebViewClient() {
+                            override fun shouldOverrideUrlLoading(
+                                view: WebView?,
+                                request: WebResourceRequest?,
+                            ): Boolean {
+                                return false
                             }
 
-                            super.doUpdateVisitedHistory(view, url, isReload)
-                        }
-                    }
+                            override fun doUpdateVisitedHistory(
+                                view: WebView?,
+                                url: String?,
+                                isReload: Boolean,
+                            ) {
 
-                    settings.javaScriptEnabled = true
-                    loadUrl(captchaUrl)
+                                if (code == 200) {
+                                    isSuccess(true)
+                                }
+
+                                super.doUpdateVisitedHistory(view, url, isReload)
+                            }
+                        }
+
+                        settings.javaScriptEnabled = true
+                        loadUrl(captchaUrl)
+                    }
                 }
-            })
+            )
         }
     )
 }

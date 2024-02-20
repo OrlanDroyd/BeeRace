@@ -15,6 +15,8 @@ import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_home.RaceHo
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_home.RaceHomeViewModel
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_race.RaceScreen
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_race.RaceViewModel
+import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_win.WinScreen
+import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_win.WinScreenViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -41,7 +43,13 @@ fun SetupNavGraph(
                 navController.navigate(Screen.Error.route)
             },
             navigateToWin = {
-                // TODO
+                navController.popBackStack()
+                navController.navigate(
+                    Screen.BeeWin.passBeeInfo(
+                        beeName = it.name,
+                        beeColor = it.color
+                    )
+                )
             }
         )
 
@@ -52,6 +60,12 @@ fun SetupNavGraph(
         )
 
         errorRoute()
+
+        winRoute(
+            onRestart = {
+                navController.popBackStack()
+            }
+        )
 
     }
 }
@@ -133,5 +147,20 @@ private fun NavGraphBuilder.authenticationRoute(
 private fun NavGraphBuilder.errorRoute() {
     composable(route = Screen.Error.route) {
         ErrorScreen()
+    }
+}
+
+private fun NavGraphBuilder.winRoute(
+    onRestart: () -> Unit
+) {
+    composable(route = Screen.BeeWin.route) {
+        val viewModel: WinScreenViewModel = hiltViewModel()
+        val state = viewModel.state.value
+
+        WinScreen(
+            beeName = state.name,
+            beeColor = state.color.replace("#", ""), // remove `#` and pass by navArgs
+            onRestart = onRestart
+        )
     }
 }
