@@ -6,6 +6,7 @@ sealed class Screen(val route: String) {
         const val HOME = "home"
         const val RACE_BEES = "race_screen"
         const val AUTHENTICATION = "authentication"
+        const val ERROR = "error"
 
         const val TIME_ARGUMENT_KEY = "time_left"
     }
@@ -21,5 +22,7 @@ sealed class Screen(val route: String) {
     }
 
     data object Authentication : Screen(route = AUTHENTICATION)
+
+    data object Error : Screen(route = ERROR)
 
 }

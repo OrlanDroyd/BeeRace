@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gmail.orlandroyd.beerace.feature_race.domain.model.BeeDomainModel
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_authentication.CaptchaScreen
+import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_error.ErrorScreen
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_home.RaceHomeScreen
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_home.RaceHomeViewModel
 import com.gmail.orlandroyd.beerace.feature_race.presentation.screen_race.RaceScreen
@@ -37,7 +38,7 @@ fun SetupNavGraph(
                 navController.navigate(Screen.Authentication.route)
             },
             navigateToError = {
-                // TODO
+                navController.navigate(Screen.Error.route)
             },
             navigateToWin = {
                 // TODO
@@ -49,6 +50,8 @@ fun SetupNavGraph(
                 navController.navigateUp()
             }
         )
+
+        errorRoute()
 
     }
 }
@@ -124,5 +127,11 @@ private fun NavGraphBuilder.authenticationRoute(
                     onClose()
                 }
             })
+    }
+}
+
+private fun NavGraphBuilder.errorRoute() {
+    composable(route = Screen.Error.route) {
+        ErrorScreen()
     }
 }
